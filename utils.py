@@ -33,7 +33,7 @@ class PlotData:
             shutil.rmtree("./plots")
         os.mkdir("./plots")
 
-        # plot comparative histograms 
+        # plot comparative histograms (mean.png, max.png, min.png)
         cols = ["mean", "max", "min"]
         for col in cols:
             plt.figure(figsize=(10, 6))
@@ -46,7 +46,7 @@ class PlotData:
             plt.savefig(f"./plots/{col}.png")
         plt.close()
 
-        # correlation matrix
+        # corr_matrix.png
         cols = df.columns[3:]
         corr_matrix = df[cols].corr()
         # matrix = np.triu(corr_matrix)
@@ -59,13 +59,11 @@ class PlotData:
         plt.savefig('./plots/corr_matrix.png')
         plt.close()
 
-        # scatterplot
+        # scatterplot.png
         plt.figure(figsize=(10, 6))
-
-
-        sns.scatterplot(data=df, x="floor_max", y="floor_mean", hue="gt_corners", palette = "Set2")
+        sns.scatterplot(data=df, x="floor_max", y="floor_mean", hue="gt_corners", palette="Set2")
         plt.savefig('./plots/scatterplot.png')
-        # plt.title("Scatterplot gt_corners", fontsize = 18)
+
         # x=df["floor_max"]
         # y=df["floor_mean"]
         # classes = df["gt_corners"]
@@ -78,15 +76,22 @@ class PlotData:
         # plt.legend()
         plt.clf()
 
-        # plot points of gt_corners and rb_corners
+        # corners.png
+        # There is no straight line if model not perfect
+        x_ = []
+        y_ = []
+        for x, y in set(list(zip(df["rb_corners"], df["gt_corners"]))):
+            x_.append(x)
+            y_.append(y)
         plt.figure(figsize=(6,6))
-        plt.scatter(x=df["gt_corners"], y=df["rb_corners"], color="red")
+        plt.plot(x_, y_, color="green")
+        plt.scatter(x=df["rb_corners"], y=df["gt_corners"], color="red")
         plt.xlabel("gt_corners")
         plt.ylabel("rb_corners")
         plt.savefig('./plots/corners.png')
         plt.close()
 
-        # value counts
+        # bars.png
         gt_dict = df["gt_corners"].value_counts().to_dict()
         rb_dict = df["rb_corners"].value_counts().to_dict()
 
