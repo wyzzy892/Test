@@ -63,33 +63,7 @@ class PlotData:
         plt.figure(figsize=(10, 6))
         sns.scatterplot(data=df, x="floor_max", y="floor_mean", hue="gt_corners", palette="Set2")
         plt.savefig('./plots/scatterplot.png')
-
-        # x=df["floor_max"]
-        # y=df["floor_mean"]
-        # classes = df["gt_corners"]
-        # unique = list(set(classes))
-        # colors = ["red", "blue", "orange", "pink"]
-        # for i, u in enumerate(unique):
-        #     xi = [x[j] for j  in range(len(x)) if classes[j] == u]
-        #     yi = [y[j] for j  in range(len(x)) if classes[j] == u]
-        #     plt.scatter(xi, yi, c=colors[i], label=str(u))
-        # plt.legend()
         plt.clf()
-
-        # corners.png
-        # There is no straight line if model not perfect
-        x_ = []
-        y_ = []
-        for x, y in set(list(zip(df["rb_corners"], df["gt_corners"]))):
-            x_.append(x)
-            y_.append(y)
-        plt.figure(figsize=(6,6))
-        plt.plot(x_, y_, color="green")
-        plt.scatter(x=df["rb_corners"], y=df["gt_corners"], color="red")
-        plt.xlabel("gt_corners")
-        plt.ylabel("rb_corners")
-        plt.savefig('./plots/corners.png')
-        plt.close()
 
         # bars.png
         gt_dict = df["gt_corners"].value_counts().to_dict()
@@ -102,13 +76,28 @@ class PlotData:
         bar_container0 = ax[0].bar(gt_nums, gt_counts)
         bar_container1 = ax[1].bar(rb_nums, rb_counts)
 
-        ax[0].set(ylabel='rooms', title='values count', ylim=(0, 1300))
+        ax[0].set(ylabel='rooms', title='gt values count', ylim=(0, 1300))
         ax[0].bar_label(bar_container0)
 
-        ax[1].set(ylabel='rooms', title='values count', ylim=(0, 1300))
+        ax[1].set(ylabel='rooms', title='rb values count', ylim=(0, 1300))
         ax[1].bar_label(bar_container1)
         plt.savefig('./plots/bars.png')
         plt.close()
+        plt.clf()
 
+        # mean_dependency.png
+        plt.scatter(x=df["floor_mean"], y=df["ceiling_mean"], color="red")
+        plt.xlabel("floor_mean")
+        plt.ylabel("ceiling_mean")
+        plt.title("Dependence of ceiling_mean on floor_mean")
+        plt.savefig('./plots/dependence.png')
+        plt.close()
+        plt.clf()
+
+        # pairplor.png
+        sns.pairplot(df)
+        plt.savefig("./plots/pairplot.png")
+        plt.close()
+        plt.clf()
         
 
