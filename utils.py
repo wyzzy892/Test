@@ -104,4 +104,12 @@ class PlotData:
         plt.close()
         plt.clf()
         
+        
+if __name__ == "__main__":
+    dataset = pd.read_json("deviation.json")
+    p = PlotData()
+    y_t = dataset["gt_corners"].to_numpy()
+    y_p = dataset["rb_corners"].to_numpy()
+    print(f"accuracy: {p.accuracy(y_true=y_t, y_pred=y_p)}") 
+
 
