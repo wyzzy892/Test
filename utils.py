@@ -5,9 +5,13 @@ import seaborn as sns
 import os, shutil
 
 class PlotData:
+    def check_missing_values(self, data: pd.DataFrame)->pd.Series:
+        """Check missing values in dataset"""
+        return data.isna().sum()
+
     def r2_score(self, y_true:np.ndarray=None, y_pred:np.ndarray=None)->np.double:
         """Calculate r2 score metric"""
-        return 1. - np.sum((y_true - y_pred))/np.sum((y_true-y_true.mean()))
+        return 1. - np.sum((y_true - y_pred)**2)/np.sum((y_true-y_true.mean())**2)
     
     def accuracy(self, y_true:np.ndarray=None, y_pred:np.ndarray=None)->np.double:
         """Calculate accuracy"""
